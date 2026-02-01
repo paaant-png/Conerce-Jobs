@@ -4,7 +4,6 @@ import json
 import requests
 from bs4 import BeautifulSoup
 
-# --- FAST SCRAPERS (Standard Requests) ---
 def scrape_linkedin():
     jobs = []
     headers = {"User-Agent": "Mozilla/5.0"}
@@ -19,66 +18,63 @@ def scrape_linkedin():
                 "location": card.find('span', class_='job-search-card__location').text.strip(),
                 "link": card.parent.find('a')['href'],
                 "category": "LINKEDIN",
-                "date": "Recently"
+                "experience": "1-3 Years" # LinkedIn guest doesn't show years, so we default
             })
     except: pass
     return jobs
 
-# --- DYNAMIC SCRAPERS (Playwright) ---
-async def scrape_corporate_portals():
-    corporate_jobs = []
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
-        page = await browser.new_page()
+async def scrape_corporate(browser):
+    jobs = []
+    page = await browser.new_page()
+    
+    # PEPSICO
+    try:
+        await page.goto("https://www.pepsicojobs.com/india/jobs", timeout=60000)
+        await page.wait_for_selector(".jobs-list-item", timeout=15000)
+        items = await page.query_selector_all(".jobs-list-item")
+        for item in items:
+            title = await (await item.query_selector(".job-title")).inner_text()
+            link = await (await item.query_selector("a")).get_attribute("href")
+            jobs.append({
+                "title": title.strip(),
+                "company": "PepsiCo India",
+                "location": "India",
+                "link": link,
+                "category": "DIRECT",
+                "experience": "Mid-Senior"
+            })
+    except: print("PepsiCo failed")
 
-        # 1. Mars
-        try:
-            await page.goto("https://careers.mars.com/in/en/search-results?keywords=marketing", timeout=60000)
-            await page.wait_for_selector(".jobs-list-item", timeout=10000)
-            items = await page.query_selector_all(".jobs-list-item")
-            for item in items:
-                title = await item.query_selector(".job-title")
-                link = await item.query_selector("a")
-                corporate_jobs.append({
-                    "title": await title.inner_text(),
-                    "company": "Mars, Inc.",
-                    "location": "India",
-                    "link": await link.get_attribute("href"),
-                    "category": "DIRECT",
-                    "date": "Direct"
-                })
-        except: print("Mars timed out")
+    # MARS
+    try:
+        await page.goto("https://careers.mars.com/in/en/search-results?keywords=marketing", timeout=60000)
+        await page.wait_for_selector(".jobs-list-item", timeout=15000)
+        items = await page.query_selector_all(".jobs-list-item")
+        for item in items:
+            title = await (await item.query_selector(".job-title")).inner_text()
+            link = await (await item.query_selector("a")).get_attribute("href")
+            jobs.append({
+                "title": title.strip(),
+                "company": "Mars, Inc.",
+                "location": "India",
+                "link": link,
+                "category": "DIRECT",
+                "experience": "Entry-Mid"
+            })
+    except: print("Mars failed")
 
-        # 2. PepsiCo
-        try:
-            await page.goto("https://www.pepsicojobs.com/india/jobs", timeout=60000)
-            await page.wait_for_selector(".jobs-list-item", timeout=10000)
-            items = await page.query_selector_all(".jobs-list-item")
-            for item in items:
-                title = await item.query_selector(".job-title")
-                corporate_jobs.append({
-                    "title": await title.inner_text(),
-                    "company": "PepsiCo India",
-                    "location": "India",
-                    "link": await (await item.query_selector("a")).get_attribute("href"),
-                    "category": "DIRECT",
-                    "date": "Direct"
-                })
-        except: print("PepsiCo timed out")
-
-        await browser.close()
-    return corporate_jobs
+    return jobs
 
 async def main():
-    print("Starting sync...")
     linkedin_data = scrape_linkedin()
-    corporate_data = await scrape_corporate_portals()
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        corp_data = await scrape_corporate(browser)
+        await browser.close()
     
-    final_list = linkedin_data + corporate_data
-    
+    final = linkedin_data + corp_data
     with open('jobs.json', 'w') as f:
-        json.dump(final_list, f, indent=4)
-    print(f"Success: {len(final_list)} jobs saved.")
+        json.dump(final, f, indent=4)
 
 if __name__ == "__main__":
     asyncio.run(main())
