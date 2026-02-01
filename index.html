@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 15px; }
+        .job-card { border-bottom: 1px solid #eee; padding: 15px 0; }
+        .title { color: #0073b1; font-weight: bold; text-decoration: none; font-size: 1.1rem; }
+        .title:hover { text-decoration: underline; }
+        .company { color: #333; font-weight: 600; font-size: 0.9rem; margin: 4px 0; }
+        .meta { color: #666; font-size: 0.8rem; }
+        .badge { display: inline-block; background: #e1f3ff; color: #0073b1; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <div id="job-list">Fetching latest jobs from LinkedIn India...</div>
+    <script>
+        fetch('./jobs.json')
+            .then(res => res.json())
+            .then(data => {
+                const container = document.getElementById('job-list');
+                if(data.length === 0) { container.innerHTML = "No jobs found today."; return; }
+                container.innerHTML = data.map(job => `
+                    <div class="job-card">
+                        <span class="badge">${job.category}</span><br>
+                        <a href="${job.link}" target="_blank" class="title">${job.title}</a>
+                        <div class="company">${job.company}</div>
+                        <div class="meta">📍 ${job.location}</div>
+                    </div>
+                `).join('');
+            }).catch(() => {
+                document.getElementById('job-list').innerHTML = "Updating job database... please refresh in 1 minute.";
+            });
+    </script>
+</body>
+</html>
