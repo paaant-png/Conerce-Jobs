@@ -1,47 +1,40 @@
-name: Career Portal Sync
+name: Job Board Sync
 
 on:
   schedule:
-    # Runs every 12 hours (2 times a day) to keep data fresh without being blocked
-    - cron: '0 */12 * * *'
-  workflow_dispatch: # Allows you to manually trigger the sync from the Actions tab
+    - cron: '0 2,14 * * *' # Runs at 2 AM and 2 PM UTC (Best times to avoid blocking)
+  workflow_dispatch:
 
 jobs:
-  build:
+  scrape-and-deploy:
     runs-on: ubuntu-latest
-    
     permissions:
-      contents: write # Required to allow the bot to push jobs.json back to your repo
+      contents: write # Critical for saving the file
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-          cache: 'pip' # Speeds up future runs
 
-      - name: Install Dependencies
+      - name: Install Libraries
         run: |
-          python -m pip install --upgrade pip
-          pip install requests beautifulsoup4 playwright
-          
-      - name: Install Playwright Browsers
-        run: |
-          # This installs the Chromium browser needed to "see" dynamic career pages
+          pip install playwright requests beautifulsoup4
           playwright install chromium --with-deps
 
-      - name: Run Job Scraper
+      - name: Run Scraper
         run: python scraper.py
-        env:
+        env: 
           PYTHONUNBUFFERED: 1
+        timeout-minutes: 10 # Prevents getting stuck
 
-      - name: Commit and Push Changes
+      - name: Save Data
         run: |
-          git config --global user.name "CareerBot"
+          git config --global user.name "AutoBot"
           git config --global user.email "bot@github.com"
           git add jobs.json
-          # Only commit if there are changes to avoid workflow errors
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update: $(date)" && git push)
+          git commit -m "Refresh jobs [skip ci]" || echo "No changes to commit"
+          git push
