@@ -2,33 +2,51 @@
 <html>
 <head>
     <style>
-        body { font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 15px; }
-        .job-card { border-bottom: 1px solid #eee; padding: 15px 0; }
-        .title { color: #0073b1; font-weight: bold; text-decoration: none; font-size: 1.1rem; }
-        .title:hover { text-decoration: underline; }
-        .company { color: #333; font-weight: 600; font-size: 0.9rem; margin: 4px 0; }
-        .meta { color: #666; font-size: 0.8rem; }
-        .badge { display: inline-block; background: #e1f3ff; color: #0073b1; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; margin-bottom: 5px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; margin: 0; padding: 10px; }
+        .job-card { 
+            border: 1px solid #e0e0e0; padding: 15px; margin-bottom: 12px; 
+            border-radius: 8px; border-left: 5px solid #0073b1; 
+        }
+        /* COMPANY HIGHLIGHT */
+        .company { 
+            font-size: 0.9rem; font-weight: 800; color: #d32f2f; 
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .title { 
+            display: block; color: #0073b1; font-weight: bold; 
+            text-decoration: none; font-size: 1.1rem; margin: 5px 0;
+        }
+        .loc { color: #666; font-size: 0.85rem; margin-bottom: 10px; }
+        
+        /* BADGES FOR CTC & DATE */
+        .info-bar { display: flex; gap: 8px; flex-wrap: wrap; }
+        .badge { 
+            font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; font-weight: 600;
+        }
+        .badge-date { background: #fff3e0; color: #e65100; border: 1px solid #ffe0b2; }
+        .badge-ctc { background: #e8f5e9; color: #1b5e20; border: 1px solid #c8e6c9; }
+        .badge-cat { background: #e1f5fe; color: #01579b; }
     </style>
 </head>
 <body>
-    <div id="job-list">Fetching latest jobs from LinkedIn India...</div>
+    <div id="display">Loading Highlighted Jobs...</div>
     <script>
         fetch('./jobs.json')
             .then(res => res.json())
             .then(data => {
-                const container = document.getElementById('job-list');
-                if(data.length === 0) { container.innerHTML = "No jobs found today."; return; }
+                const container = document.getElementById('display');
                 container.innerHTML = data.map(job => `
                     <div class="job-card">
-                        <span class="badge">${job.category}</span><br>
-                        <a href="${job.link}" target="_blank" class="title">${job.title}</a>
+                        <span class="badge badge-cat">${job.category}</span>
                         <div class="company">${job.company}</div>
-                        <div class="meta">📍 ${job.location}</div>
+                        <a href="${job.link}" target="_blank" class="title">${job.title}</a>
+                        <div class="loc">📍 ${job.location}</div>
+                        <div class="info-bar">
+                            <span class="badge badge-date">📅 ${job.date}</span>
+                            <span class="badge badge-ctc">💰 CTC: ${job.ctc}</span>
+                        </div>
                     </div>
                 `).join('');
-            }).catch(() => {
-                document.getElementById('job-list').innerHTML = "Updating job database... please refresh in 1 minute.";
             });
     </script>
 </body>
