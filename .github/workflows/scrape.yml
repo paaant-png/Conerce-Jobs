@@ -28,3 +28,6 @@ jobs:
   run: |
     pip install playwright
     playwright install chromium
+    - name: Run Scraper
+        run: python scraper.py
+        timeout-minutes: 15 # Give it enough time to open multiple sites
