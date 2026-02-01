@@ -4,30 +4,33 @@ import json
 import time
 
 def scrape_jobs():
-    # Keywords focused on your request
     keywords = ["E-commerce", "Quick Commerce", "Marketing"]
     all_jobs = []
-    
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
 
     for word in keywords:
-        # LinkedIn India Guest API URL
         url = f"https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords={word}&location=India&geoId=102713980&start=0"
-        
         try:
             res = requests.get(url, headers=headers, timeout=10)
             soup = BeautifulSoup(res.text, 'html.parser')
             cards = soup.find_all('div', class_='base-search-card__info')
 
             for card in cards:
+                # 1. Get Date Posted
+                date_tag = card.find('time')
+                posted_date = date_tag.text.strip() if date_tag else "Recently"
+                
+                # 2. Extract Data
                 all_jobs.append({
                     "title": card.find('h3', class_='base-search-card__title').text.strip(),
                     "company": card.find('h4', class_='base-search-card__subtitle').text.strip(),
                     "location": card.find('span', class_='job-search-card__location').text.strip(),
                     "link": card.parent.find('a', class_='base-card__full-link')['href'],
-                    "category": word
+                    "category": word,
+                    "date": posted_date,
+                    "ctc": "Best in Industry" # Placeholder for CTC
                 })
             time.sleep(2) 
         except Exception as e:
