@@ -3,108 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Feed India</title>
     <style>
-        :root {
-            --brand: #0073b1;
-            --text-main: #1a1a1a;
-            --text-muted: #666;
-            --border: #ececec;
-        }
-
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background: #ffffff; color: var(--text-main); margin: 0; padding: 20px; line-height: 1.6;
-        }
-
-        .container { max-width: 850px; margin: 0 auto; }
-
-        .header { 
-            display: flex; justify-content: space-between; align-items: baseline;
-            padding-bottom: 15px; border-bottom: 2px solid #000; margin-bottom: 30px;
-        }
-
-        .count-label { font-size: 0.9rem; font-weight: 700; color: var(--brand); text-transform: uppercase; }
-
-        .job-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 25px 0; border-bottom: 1px solid var(--border);
-        }
-
-        .job-main { flex: 1; padding-right: 20px; }
-
-        .company { 
-            font-size: 0.75rem; font-weight: 800; color: #d32f2f; 
-            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; display: block;
-        }
-
-        .title { 
-            font-size: 1.2rem; font-weight: 700; color: var(--text-main); 
-            text-decoration: none; display: block; margin-bottom: 8px;
-        }
+        :root { --black: #000000; --muted: #717171; --line: #efefef; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif; background: #fff; margin: 0; padding: 20px; color: var(--black); }
+        .container { max-width: 800px; margin: 0 auto; }
         
-        .title:hover { text-decoration: underline; color: var(--brand); }
+        .header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid var(--black); padding-bottom: 15px; margin-bottom: 30px; }
+        .header h1 { font-size: 1.1rem; font-weight: 850; text-transform: uppercase; margin:0; }
 
-        .meta { display: flex; gap: 15px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+        .job-row { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; border-bottom: 1px solid var(--line); }
+        .company { font-size: 0.72rem; font-weight: 900; color: #d32f2f; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px; display: block; }
+        
+        .title { font-size: 1.15rem; font-weight: 700; color: var(--black); text-decoration: none; display: block; margin-bottom: 8px; transition: opacity 0.2s; }
+        .title:hover { opacity: 0.6; }
 
-        .tag { background: #f0f0f0; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
+        .meta { display: flex; gap: 12px; font-size: 0.82rem; color: var(--muted); align-items: center; }
+        .tag { border: 1px solid #ddd; padding: 2px 7px; border-radius: 3px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; }
 
-        .apply-btn {
-            background: #000; color: #fff; padding: 12px 24px; border-radius: 6px;
-            text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: 0.2s;
-        }
-
-        .apply-btn:hover { background: var(--brand); }
-
-        .date { font-size: 0.75rem; color: #aaa; margin-top: 10px; display: block; }
+        .btn { border: 1.5px solid var(--black); color: var(--black); padding: 9px 18px; border-radius: 4px; text-decoration: none; font-size: 0.82rem; font-weight: 700; transition: 0.2s; }
+        .btn:hover { background: var(--black); color: #fff; }
 
         @media (max-width: 600px) {
             .job-row { flex-direction: column; align-items: flex-start; }
-            .apply-btn { margin-top: 15px; width: 100%; text-align: center; box-sizing: border-box; }
+            .btn { margin-top: 15px; width: 100%; text-align: center; box-sizing: border-box; }
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <div class="header">
-        <div id="count" class="count-label">Fetching Live Opportunities...</div>
-        <div style="font-size: 0.8rem; color: #999;">INDIA FEED</div>
+    <div class="container">
+        <div class="header">
+            <h1 id="count">00 OPPORTUNITIES</h1>
+            <span style="font-size: 0.7rem; color: var(--muted); font-weight: 700;">NESTLÉ • UNILEVER • LIVE</span>
+        </div>
+        <div id="feed"></div>
     </div>
 
-    <div id="feed"></div>
-</div>
-
-<script>
-    async function loadJobs() {
-        try {
-            const response = await fetch('./jobs.json');
-            const jobs = await response.json();
-            
-            document.getElementById('count').innerText = `${jobs.length} Active Openings`;
-            
-            const feed = document.getElementById('feed');
-            feed.innerHTML = jobs.map(j => `
-                <div class="job-row">
-                    <div class="job-main">
-                        <span class="company">${j.company}</span>
-                        <a href="${j.link}" target="_blank" class="title">${j.title}</a>
-                        <div class="meta">
-                            <span>📍 ${j.location}</span>
-                            <span>💼 ${j.experience}</span>
-                            <span class="tag">${j.category}</span>
+    <script>
+        async function load() {
+            try {
+                const res = await fetch('./jobs.json');
+                const data = await res.json();
+                document.getElementById('count').innerText = `${data.length.toString().padStart(2, '0')} OPPORTUNITIES`;
+                document.getElementById('feed').innerHTML = data.map(j => `
+                    <div class="job-row">
+                        <div style="flex:1; padding-right:20px;">
+                            <span class="company">${j.company}</span>
+                            <a href="${j.link}" target="_blank" class="title">${j.title}</a>
+                            <div class="meta">
+                                <span>📍 ${j.location}</span>
+                                <span class="tag">${j.category}</span>
+                            </div>
                         </div>
-                        <span class="date">Posted ${j.date}</span>
+                        <a href="${j.link}" target="_blank" class="btn">View Role</a>
                     </div>
-                    <a href="${j.link}" target="_blank" class="apply-btn">Apply Now</a>
-                </div>
-            `).join('');
-        } catch (e) {
-            document.getElementById('count').innerText = "Live Feed Syncing...";
+                `).join('');
+            } catch (e) { document.getElementById('count').innerText = "UPDATING..."; }
         }
-    }
-    loadJobs();
-</script>
-
+        load();
+    </script>
 </body>
 </html>
