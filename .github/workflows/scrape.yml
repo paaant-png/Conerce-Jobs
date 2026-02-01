@@ -1,33 +1,47 @@
-name: LinkedIn India Scrape
+name: Career Portal Sync
+
 on:
   schedule:
-    - cron: '0 */12 * * *' # Runs every 12 hours
-  workflow_dispatch:
+    # Runs every 12 hours (2 times a day) to keep data fresh without being blocked
+    - cron: '0 */12 * * *'
+  workflow_dispatch: # Allows you to manually trigger the sync from the Actions tab
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    
     permissions:
-      contents: write
+      contents: write # Required to allow the bot to push jobs.json back to your repo
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
-      - name: Install dependencies
-        run: pip install requests beautifulsoup4
-      - name: Run Scraper
-        run: python scraper.py
-      - name: Commit Data
+          python-version: '3.10'
+          cache: 'pip' # Speeds up future runs
+
+      - name: Install Dependencies
         run: |
-          git config --global user.name 'JobBot'
-          git config --global user.email 'bot@github.com'
-          git add jobs.json
-          git commit -m "Auto-update jobs" || exit 0
-          git push- name: Install Playwright
-  run: |
-    pip install playwright
-    playwright install chromium
-    - name: Run Scraper
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4 playwright
+          
+      - name: Install Playwright Browsers
+        run: |
+          # This installs the Chromium browser needed to "see" dynamic career pages
+          playwright install chromium --with-deps
+
+      - name: Run Job Scraper
         run: python scraper.py
-        timeout-minutes: 15 # Give it enough time to open multiple sites
+        env:
+          PYTHONUNBUFFERED: 1
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "CareerBot"
+          git config --global user.email "bot@github.com"
+          git add jobs.json
+          # Only commit if there are changes to avoid workflow errors
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update: $(date)" && git push)
