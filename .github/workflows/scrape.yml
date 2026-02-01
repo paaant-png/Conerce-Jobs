@@ -1,0 +1,27 @@
+name: Refresh Jobs
+on:
+  schedule:
+    - cron: '0 0 * * *' # Automatically runs every midnight
+  workflow_dispatch: # Allows you to run it manually
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4
+      - name: Run Scraper
+        run: python scraper.py
+      - name: Commit data
+        run: |
+          git config --global user.name 'JobBot'
+          git config --global user.email 'bot@github.com'
+          git add jobs.json
+          git commit -m "Updated jobs.json" || exit 0
+          git push
