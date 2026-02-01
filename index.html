@@ -2,52 +2,80 @@
 <html>
 <head>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; margin: 0; padding: 10px; }
-        .job-card { 
-            border: 1px solid #e0e0e0; padding: 15px; margin-bottom: 12px; 
-            border-radius: 8px; border-left: 5px solid #0073b1; 
-        }
-        /* COMPANY HIGHLIGHT */
-        .company { 
-            font-size: 0.9rem; font-weight: 800; color: #d32f2f; 
-            text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        .title { 
-            display: block; color: #0073b1; font-weight: bold; 
-            text-decoration: none; font-size: 1.1rem; margin: 5px 0;
-        }
-        .loc { color: #666; font-size: 0.85rem; margin-bottom: 10px; }
+        :root { --primary: #0a66c2; --secondary: #d32f2f; --bg: #f3f6f8; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 15px; }
         
-        /* BADGES FOR CTC & DATE */
-        .info-bar { display: flex; gap: 8px; flex-wrap: wrap; }
-        .badge { 
-            font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; font-weight: 600;
-        }
-        .badge-date { background: #fff3e0; color: #e65100; border: 1px solid #ffe0b2; }
-        .badge-ctc { background: #e8f5e9; color: #1b5e20; border: 1px solid #c8e6c9; }
-        .badge-cat { background: #e1f5fe; color: #01579b; }
+        /* HEADER & FILTERS */
+        .controls { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; position: sticky; top: 0; z-index: 100; }
+        .search-bar { display: flex; gap: 10px; margin-bottom: 15px; }
+        input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none; }
+        
+        /* JOB CARDS */
+        .job-card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px; border: 1px solid #e0e0e0; transition: 0.3s; }
+        .job-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.1); border-color: var(--primary); }
+        
+        .company { color: var(--secondary); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; }
+        .title { color: var(--primary); font-size: 1.2rem; font-weight: 700; text-decoration: none; display: block; margin: 5px 0; }
+        
+        .description { font-size: 0.9rem; color: #555; line-height: 1.5; margin: 10px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        /* INFO BAR (CTC, EXP, LOC) */
+        .info-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; padding-top: 10px; border-top: 1px solid #f0f0f0; }
+        .badge { font-size: 0.75rem; padding: 5px 12px; border-radius: 20px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+        .badge-ctc { background: #e6f4ea; color: #1e7e34; }
+        .badge-exp { background: #e8eaf6; color: #3f51b5; }
+        .badge-loc { background: #fff3e0; color: #e65100; }
     </style>
 </head>
 <body>
-    <div id="display">Loading Highlighted Jobs...</div>
+
+    <div class="controls">
+        <div class="search-bar">
+            <input type="text" id="locInput" placeholder="Filter by Location (e.g. Mumbai, Remote)" onkeyup="applyFilters()">
+            <input type="text" id="jobInput" placeholder="Search Role or Company" onkeyup="applyFilters()">
+        </div>
+    </div>
+
+    <div id="jobList"></div>
+
     <script>
-        fetch('./jobs.json')
-            .then(res => res.json())
-            .then(data => {
-                const container = document.getElementById('display');
-                container.innerHTML = data.map(job => `
-                    <div class="job-card">
-                        <span class="badge badge-cat">${job.category}</span>
-                        <div class="company">${job.company}</div>
-                        <a href="${job.link}" target="_blank" class="title">${job.title}</a>
-                        <div class="loc">📍 ${job.location}</div>
-                        <div class="info-bar">
-                            <span class="badge badge-date">📅 ${job.date}</span>
-                            <span class="badge badge-ctc">💰 CTC: ${job.ctc}</span>
-                        </div>
+        let allJobs = [];
+
+        async function init() {
+            const res = await fetch('./jobs.json');
+            allJobs = await res.json();
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const locTerm = document.getElementById('locInput').value.toLowerCase();
+            const jobTerm = document.getElementById('jobInput').value.toLowerCase();
+            
+            const filtered = allJobs.filter(j => 
+                j.location.toLowerCase().includes(locTerm) && 
+                (j.title.toLowerCase().includes(jobTerm) || j.company.toLowerCase().includes(jobTerm))
+            );
+            render(filtered);
+        }
+
+        function render(data) {
+            const container = document.getElementById('jobList');
+            container.innerHTML = data.map(j => `
+                <div class="job-card">
+                    <div class="company">${j.company}</div>
+                    <a href="${j.link}" target="_blank" class="title">${j.title}</a>
+                    <div class="description">${j.desc}</div>
+                    
+                    <div class="info-bar">
+                        <span class="badge badge-loc">📍 ${j.location}</span>
+                        <span class="badge badge-exp">💼 ${j.exp}</span>
+                        <span class="badge badge-ctc">💰 ${j.ctc}</span>
+                        <span style="margin-left:auto; font-size:0.7rem; color:#999;">${j.date}</span>
                     </div>
-                `).join('');
-            });
+                </div>
+            `).join('');
+        }
+        init();
     </script>
 </body>
 </html>
