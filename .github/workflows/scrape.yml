@@ -24,4 +24,7 @@ jobs:
           git config --global user.email 'bot@github.com'
           git add jobs.json
           git commit -m "Auto-update jobs" || exit 0
-          git push
+          git push- name: Install Playwright
+  run: |
+    pip install playwright
+    playwright install chromium
