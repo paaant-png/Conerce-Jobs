@@ -1,41 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Feed India</title>
     <style>
-        :root { --brand: #0073b1; --mars: #004587; --text: #1a1a1a; }
-        body { font-family: -apple-system, sans-serif; background: #fff; padding: 20px; }
-        .job-row { display: flex; justify-content: space-between; padding: 20px 0; border-bottom: 1px solid #eee; }
-        .company { font-size: 0.7rem; font-weight: 800; color: #d32f2f; text-transform: uppercase; }
-        .title { font-size: 1.1rem; font-weight: 700; color: var(--text); text-decoration: none; display: block; margin: 4px 0; }
-        .meta { font-size: 0.85rem; color: #666; display: flex; gap: 10px; }
-        .source-tag { font-size: 0.65rem; background: #eee; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-        .apply-btn { background: #000; color: #fff; padding: 8px 16px; border-radius: 5px; text-decoration: none; font-size: 0.8rem; font-weight: 600; }
+        :root {
+            --brand: #0073b1;
+            --text-main: #1a1a1a;
+            --text-muted: #666;
+            --border: #ececec;
+        }
+
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background: #ffffff; color: var(--text-main); margin: 0; padding: 20px; line-height: 1.6;
+        }
+
+        .container { max-width: 850px; margin: 0 auto; }
+
+        .header { 
+            display: flex; justify-content: space-between; align-items: baseline;
+            padding-bottom: 15px; border-bottom: 2px solid #000; margin-bottom: 30px;
+        }
+
+        .count-label { font-size: 0.9rem; font-weight: 700; color: var(--brand); text-transform: uppercase; }
+
+        .job-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 25px 0; border-bottom: 1px solid var(--border);
+        }
+
+        .job-main { flex: 1; padding-right: 20px; }
+
+        .company { 
+            font-size: 0.75rem; font-weight: 800; color: #d32f2f; 
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; display: block;
+        }
+
+        .title { 
+            font-size: 1.2rem; font-weight: 700; color: var(--text-main); 
+            text-decoration: none; display: block; margin-bottom: 8px;
+        }
+        
+        .title:hover { text-decoration: underline; color: var(--brand); }
+
+        .meta { display: flex; gap: 15px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+
+        .tag { background: #f0f0f0; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
+
+        .apply-btn {
+            background: #000; color: #fff; padding: 12px 24px; border-radius: 6px;
+            text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: 0.2s;
+        }
+
+        .apply-btn:hover { background: var(--brand); }
+
+        .date { font-size: 0.75rem; color: #aaa; margin-top: 10px; display: block; }
+
+        @media (max-width: 600px) {
+            .job-row { flex-direction: column; align-items: flex-start; }
+            .apply-btn { margin-top: 15px; width: 100%; text-align: center; box-sizing: border-box; }
+        }
     </style>
 </head>
 <body>
-    <div id="count" style="font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #000;">Loading...</div>
-    <div id="list"></div>
 
-    <script>
-        async function init() {
-            const res = await fetch('./jobs.json');
-            const jobs = await res.json();
-            document.getElementById('count').innerText = `${jobs.length} ACTIVE OPPORTUNITIES FOUND`;
-            document.getElementById('list').innerHTML = jobs.map(j => `
+<div class="container">
+    <div class="header">
+        <div id="count" class="count-label">Fetching Live Opportunities...</div>
+        <div style="font-size: 0.8rem; color: #999;">INDIA FEED</div>
+    </div>
+
+    <div id="feed"></div>
+</div>
+
+<script>
+    async function loadJobs() {
+        try {
+            const response = await fetch('./jobs.json');
+            const jobs = await response.json();
+            
+            document.getElementById('count').innerText = `${jobs.length} Active Openings`;
+            
+            const feed = document.getElementById('feed');
+            feed.innerHTML = jobs.map(j => `
                 <div class="job-row">
-                    <div>
+                    <div class="job-main">
                         <span class="company">${j.company}</span>
                         <a href="${j.link}" target="_blank" class="title">${j.title}</a>
                         <div class="meta">
                             <span>📍 ${j.location}</span>
-                            <span class="source-tag">${j.category}</span>
+                            <span>💼 ${j.experience}</span>
+                            <span class="tag">${j.category}</span>
                         </div>
+                        <span class="date">Posted ${j.date}</span>
                     </div>
-                    <a href="${j.link}" target="_blank" class="apply-btn">View Job</a>
+                    <a href="${j.link}" target="_blank" class="apply-btn">Apply Now</a>
                 </div>
             `).join('');
+        } catch (e) {
+            document.getElementById('count').innerText = "Live Feed Syncing...";
         }
-        init();
-    </script>
+    }
+    loadJobs();
+</script>
+
 </body>
 </html>
