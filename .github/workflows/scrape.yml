@@ -1,8 +1,8 @@
-name: Refresh Jobs
+name: LinkedIn India Scrape
 on:
   schedule:
-    - cron: '0 0 * * *' # Automatically runs every midnight
-  workflow_dispatch: # Allows you to run it manually
+    - cron: '0 */12 * * *' # Runs every 12 hours
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,7 +10,7 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
@@ -18,10 +18,10 @@ jobs:
         run: pip install requests beautifulsoup4
       - name: Run Scraper
         run: python scraper.py
-      - name: Commit data
+      - name: Commit Data
         run: |
           git config --global user.name 'JobBot'
           git config --global user.email 'bot@github.com'
           git add jobs.json
-          git commit -m "Updated jobs.json" || exit 0
+          git commit -m "Auto-update jobs" || exit 0
           git push
