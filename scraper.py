@@ -17,58 +17,59 @@ def scrape_linkedin():
                 "company": card.find('h4').text.strip(),
                 "location": card.find('span', class_='job-search-card__location').text.strip(),
                 "link": card.parent.find('a')['href'],
-                "category": "LINKEDIN",
-                "experience": "1-3 Years" # Default for LinkedIn
+                "category": "LinkedIn",
+                "experience": "1-3 Years"
             })
-    except: print("LinkedIn failed")
+    except: print("LinkedIn connection issue.")
     return jobs
 
-async def scrape_corporate(browser):
+async def scrape_corporate(browser, url, company_name):
     jobs = []
-    page = await browser.new_page(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-    
-    # --- PEPSICO ---
+    # Using a high-quality User-Agent to bypass simple bot filters
+    context = await browser.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36")
+    page = await context.new_page()
     try:
-        await page.goto("https://www.pepsicojobs.com/india/jobs", wait_until="networkidle", timeout=60000)
+        print(f"Syncing {company_name}...")
+        await page.goto(url, wait_until="networkidle", timeout=60000)
+        
+        # Wait for the job card container to exist
         await page.wait_for_selector(".jobs-list-item", timeout=20000)
+        
         items = await page.query_selector_all(".jobs-list-item")
         for item in items:
-            title = await (await item.query_selector(".job-title")).inner_text()
-            link = await (await item.query_selector("a")).get_attribute("href")
-            jobs.append({
-                "title": title.strip(), "company": "PepsiCo India", "location": "India",
-                "link": link, "category": "DIRECT", "experience": "Mid-Senior"
-            })
-    except: print("PepsiCo check failed - Site might be blocking GitHub IP")
-
-    # --- MARS ---
-    try:
-        await page.goto("https://careers.mars.com/in/en/search-results?keywords=marketing", wait_until="networkidle", timeout=60000)
-        await page.wait_for_selector(".jobs-list-item", timeout=20000)
-        items = await page.query_selector_all(".jobs-list-item")
-        for item in items:
-            title = await (await item.query_selector(".job-title")).inner_text()
-            link = await (await item.query_selector("a")).get_attribute("href")
-            jobs.append({
-                "title": title.strip(), "company": "Mars, Inc.", "location": "India",
-                "link": link, "category": "DIRECT", "experience": "Entry-Mid"
-            })
-    except: print("Mars check failed")
-
+            title_node = await item.query_selector(".job-title")
+            link_node = await item.query_selector("a")
+            
+            if title_node and link_node:
+                jobs.append({
+                    "title": (await title_node.inner_text()).strip(),
+                    "company": company_name,
+                    "location": "India",
+                    "link": await link_node.get_attribute("href"),
+                    "category": "Direct Hire",
+                    "experience": "Mid-Senior"
+                })
+    except Exception as e:
+        print(f"{company_name} sync error: Site took too long to load.")
+    finally:
+        await context.close()
     return jobs
 
 async def main():
-    print("Starting Scrape...")
-    linkedin_data = scrape_linkedin()
+    linkedin_jobs = scrape_linkedin()
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
-        corp_data = await scrape_corporate(browser)
+        
+        # Add your corporate URLs here
+        pepsi = await scrape_corporate(browser, "https://www.pepsicojobs.com/india/jobs", "PepsiCo")
+        mars = await scrape_corporate(browser, "https://careers.mars.com/in/en/search-results?keywords=marketing", "Mars")
+        
+        all_jobs = linkedin_jobs + pepsi + mars
+        
+        with open('jobs.json', 'w') as f:
+            json.dump(all_jobs, f, indent=4)
         await browser.close()
-    
-    final = linkedin_data + corp_data
-    with open('jobs.json', 'w') as f:
-        json.dump(final, f, indent=4)
-    print(f"Success! {len(final)} jobs saved.")
+    print(f"Done. {len(all_jobs)} jobs processed.")
 
 if __name__ == "__main__":
     asyncio.run(main())
