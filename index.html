@@ -4,37 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        :root { --main: #111; --sub: #666; --line: #eee; --blue: #0073b1; }
-        body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 30px; background: #fff; color: var(--main); line-height: 1.5; }
+        :root { --main: #1a1a1a; --sub: #6b7280; --border: #e5e7eb; --red: #dc2626; }
+        body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 20px; color: var(--main); line-height: 1.4; }
         .container { max-width: 800px; margin: 0 auto; }
         
         /* Header */
-        .header { border-bottom: 2px solid #000; padding-bottom: 12px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: baseline; }
-        .header h1 { font-size: 1.1rem; font-weight: 800; margin: 0; text-transform: uppercase; letter-spacing: -0.5px; }
+        .header { border-bottom: 2px solid #000; padding-bottom: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: baseline; }
+        .header h1 { font-size: 1.1rem; font-weight: 800; margin: 0; text-transform: uppercase; letter-spacing: -0.02em; }
 
-        /* Job Row */
-        .job-row { display: flex; justify-content: space-between; align-items: center; padding: 25px 0; border-bottom: 1px solid var(--line); }
-        .job-content { flex: 1; padding-right: 20px; }
+        /* Job Card - Minimal List Style */
+        .job-row { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border); }
+        .job-content { flex: 1; padding-right: 16px; }
         
-        .company { font-size: 0.7rem; font-weight: 800; color: #d32f2f; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; display: block; }
-        .title { font-size: 1.2rem; font-weight: 700; color: var(--main); text-decoration: none; display: block; margin-bottom: 6px; }
-        .title:hover { color: var(--blue); text-decoration: underline; }
+        .company { font-size: 0.75rem; font-weight: 700; color: var(--red); text-transform: uppercase; margin-bottom: 4px; display: block; }
+        .title { font-size: 1.15rem; font-weight: 700; color: var(--main); text-decoration: none; display: block; margin-bottom: 6px; }
+        .title:hover { opacity: 0.7; }
         
-        .meta { display: flex; gap: 15px; font-size: 0.85rem; color: var(--sub); font-weight: 500; align-items: center; }
-        .source-badge { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #000; }
+        .meta { display: flex; gap: 12px; font-size: 0.85rem; color: var(--sub); font-weight: 500; align-items: center; }
+        .tag { background: #f3f4f6; color: #374151; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
 
-        /* Apply Button */
-        .apply-btn { border: 1.5px solid #000; color: #000; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 700; transition: 0.2s; white-space: nowrap; }
+        .apply-btn { border: 1.5px solid #000; color: #000; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 700; transition: 0.1s; white-space: nowrap; }
         .apply-btn:hover { background: #000; color: #fff; }
 
-        @media (max-width: 600px) {
-            .job-row { flex-direction: column; align-items: flex-start; }
-            .apply-btn { margin-top: 15px; width: 100%; text-align: center; box-sizing: border-box; }
-        }
+        @media (max-width: 600px) { .job-row { flex-direction: column; align-items: flex-start; } .apply-btn { margin-top: 12px; width: 100%; text-align: center; } }
     </style>
 </head>
 <body>
-
 <div class="container">
     <div class="header">
         <h1 id="count">00 OPPORTUNITIES</h1>
@@ -42,35 +37,27 @@
     </div>
     <div id="jobList"></div>
 </div>
-
 <script>
     async function load() {
-        try {
-            const res = await fetch('./jobs.json');
-            const data = await res.json();
-            document.getElementById('count').innerText = `${data.length} OPPORTUNITIES`;
-            
-            const container = document.getElementById('jobList');
-            container.innerHTML = data.map(j => `
-                <div class="job-row">
-                    <div class="job-content">
-                        <span class="company">${j.company || 'Direct Hire'}</span>
-                        <a href="${j.link}" target="_blank" class="title">${j.title}</a>
-                        <div class="meta">
-                            <span>📍 ${j.location || 'India'}</span>
-                            <span>💼 ${j.experience || '1-3 Yrs'}</span>
-                            <span class="source-badge">${j.category || 'Direct'}</span>
-                        </div>
+        const res = await fetch('./jobs.json');
+        const data = await res.json();
+        document.getElementById('count').innerText = `${data.length} OPPORTUNITIES`;
+        document.getElementById('jobList').innerHTML = data.map(j => `
+            <div class="job-row">
+                <div class="job-content">
+                    <span class="company">${j.company || 'DIRECT SOURCE'}</span>
+                    <a href="${j.link}" target="_blank" class="title">${j.title}</a>
+                    <div class="meta">
+                        <span>📍 ${j.location || 'India'}</span>
+                        <span>💼 ${j.experience || 'Entry-Mid Level'}</span>
+                        <span class="tag">${j.category || 'DIRECT'}</span>
                     </div>
-                    <a href="${j.link}" target="_blank" class="apply-btn">View Role</a>
                 </div>
-            `).join('');
-        } catch (e) {
-            document.getElementById('count').innerText = "UPDATING FEED...";
-        }
+                <a href="${j.link}" target="_blank" class="apply-btn">View Job</a>
+            </div>
+        `).join('');
     }
     load();
 </script>
-
 </body>
 </html>
