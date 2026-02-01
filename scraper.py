@@ -18,11 +18,9 @@ def scrape_jobs():
             cards = soup.find_all('div', class_='base-search-card__info')
 
             for card in cards:
-                # 1. Scrape Time and Snippet
                 date_tag = card.find('time')
                 posted_date = date_tag.text.strip() if date_tag else "Recently"
                 
-                # 2. Extract Data
                 all_jobs.append({
                     "title": card.find('h3', class_='base-search-card__title').text.strip(),
                     "company": card.find('h4', class_='base-search-card__subtitle').text.strip(),
@@ -30,10 +28,7 @@ def scrape_jobs():
                     "link": card.parent.find('a', class_='base-card__full-link')['href'],
                     "category": word,
                     "date": posted_date,
-                    # Experience/Description simulated as LinkedIn hides full data in guest lists
-                    "exp": "2-5 Yrs", 
-                    "desc": "Join our team to drive " + word + " growth strategies across India markets...",
-                    "ctc": "8-12 LPA" 
+                    "experience": "Min. 1-2 Years"
                 })
             time.sleep(2) 
         except Exception as e:
