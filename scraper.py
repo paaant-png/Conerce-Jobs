@@ -1,60 +1,70 @@
-import requests
-from bs4 import BeautifulSoup
+import asyncio
+from playwright.async_api import async_playwright
 import json
-import time
-import random
 
-def scrape_linkedin_india():
-    # Professional Categories
-    categories = ["E-Commerce", "Quick Commerce", "Brand Marketing", "Digital Marketing"]
-    all_jobs = []
-    
-    # Mimic a real browser to avoid instant blocking
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
-        "Accept-Language": "en-US,en;q=0.9"
-    }
-
-    for category in categories:
-        print(f"Fetching {category}...")
-        # LinkedIn Guest API for India (geoId 102713980)
-        url = f"https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords={category}&location=India&geoId=102713980&start=0"
+async def scrape_nestle(browser):
+    page = await browser.new_page()
+    jobs = []
+    try:
+        # Direct India Jobs URL
+        await page.goto("https://www.nestle.in/jobs/search-jobs?keyword=&country=IN&location=&career_area=All", wait_until="networkidle")
+        await page.wait_for_selector(".job-title")
         
-        try:
-            response = requests.get(url, headers=headers, timeout=15)
-            soup = BeautifulSoup(response.text, 'html.parser')
-            job_cards = soup.find_all('div', class_='base-search-card__info')
-
-            for card in job_cards:
-                title = card.find('h3', class_='base-search-card__title').text.strip()
-                company = card.find('h4', class_='base-search-card__subtitle').text.strip()
-                location = card.find('span', class_='job-search-card__location').text.strip()
-                link = card.parent.find('a', class_='base-card__full-link')['href']
-                
-                # Date logic
-                date_tag = card.find('time')
-                posted_date = date_tag.text.strip() if date_tag else "Recently"
-
-                all_jobs.append({
-                    "title": title,
-                    "company": company,
-                    "location": location,
-                    "link": link,
-                    "category": category,
-                    "date": posted_date,
-                    "experience": "1-3 Years" # Default professional highlight
+        job_elements = await page.query_selector_all(".jobs-list-item") # Nestlé list selector
+        for job in job_elements:
+            title = await job.query_selector(".job-title")
+            link = await job.query_selector("a")
+            loc = await job.query_selector(".job-location")
+            
+            if title and link:
+                jobs.append({
+                    "title": await title.inner_text(),
+                    "company": "Nestlé India",
+                    "location": await loc.inner_text() if loc else "India",
+                    "link": "https://www.nestle.in" + await link.get_attribute("href"),
+                    "category": "FMCG",
+                    "date": "Direct"
                 })
-            
-            # Be polite to LinkedIn to prevent IP ban
-            time.sleep(random.uniform(3, 7)) 
-            
-        except Exception as e:
-            print(f"Error scraping {category}: {e}")
+    except Exception as e: print(f"Nestle Error: {e}")
+    return jobs
 
-    # Save data for the website
-    with open('jobs.json', 'w') as f:
-        json.dump(all_jobs, f, indent=4)
-    print(f"Successfully saved {len(all_jobs)} jobs.")
+async def scrape_unilever(browser):
+    page = await browser.new_page()
+    jobs = []
+    try:
+        await page.goto("https://careers.unilever.com/en/india", wait_until="networkidle")
+        await page.wait_for_selector(".jobs-list-item")
+        
+        job_elements = await page.query_selector_all(".jobs-list-item")
+        for job in job_elements:
+            title = await job.query_selector(".job-title")
+            loc = await job.query_selector(".job-location")
+            link = await job.query_selector("a")
+            
+            if title:
+                jobs.append({
+                    "title": await title.inner_text(),
+                    "company": "Unilever India",
+                    "location": await loc.inner_text() if loc else "India",
+                    "link": await link.get_attribute("href"),
+                    "category": "FMCG",
+                    "date": "Direct"
+                })
+    except Exception as e: print(f"Unilever Error: {e}")
+    return jobs
+
+async def main():
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        # Add your previous scrapers (Coke, Pepsi, etc.) here as well
+        nestle_jobs = await scrape_nestle(browser)
+        unilever_jobs = await scrape_unilever(browser)
+        
+        all_data = nestle_jobs + unilever_jobs
+        with open('jobs.json', 'w') as f:
+            json.dump(all_data, f, indent=4)
+        await browser.close()
+        print(f"Scraped {len(all_data)} FMCG roles.")
 
 if __name__ == "__main__":
-    scrape_linkedin_india()
+    asyncio.run(main())
