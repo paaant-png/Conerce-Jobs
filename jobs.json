@@ -1,18 +1,90 @@
 [
     {
-        "title": "Marketing Manager \ud83c\uddee\ud83c\uddf3",
-        "company": "Rearc",
-        "location": "Vadodara, Gujarat, India",
-        "link": "https://in.linkedin.com/jobs/view/marketing-manager-%F0%9F%87%AE%F0%9F%87%B3-at-rearc-4417482322?position=1&pageNum=0&refId=XafMdHXIJgotKRSJjsv5ig%3D%3D&trackingId=qbCAPW%2FeljEy8FuPyMfjag%3D%3D",
+        "title": "Marketing Manager",
+        "company": "Network18 Media & Investments Limited",
+        "location": "Noida, Uttar Pradesh, India",
+        "link": "https://in.linkedin.com/jobs/view/marketing-manager-at-network18-media-investments-limited-4435510674?position=1&pageNum=0&refId=MxNa1JTxzxp3xeE1N7WcIw%3D%3D&trackingId=PnwOqwDhohMZZfRJytTApw%3D%3D",
         "category": "LinkedIn",
         "experience": "1-3 Years",
         "is_direct": false
     },
     {
-        "title": "Marcom-Executive",
-        "company": "Hyatt Place",
-        "location": "Goa, India",
-        "link": "https://in.linkedin.com/jobs/view/marcom-executive-at-hyatt-place-4422256740?position=2&pageNum=0&refId=XafMdHXIJgotKRSJjsv5ig%3D%3D&trackingId=5k92K%2FDCsg%2FD4z%2BtV0lbww%3D%3D",
+        "title": "Executive - Marketing",
+        "company": "Larsen & Toubro",
+        "location": "Mumbai, Maharashtra, India",
+        "link": "https://in.linkedin.com/jobs/view/executive-marketing-at-larsen-toubro-4419853503?position=2&pageNum=0&refId=MxNa1JTxzxp3xeE1N7WcIw%3D%3D&trackingId=Mlt58b6ftZivbF1V5%2BhyxQ%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
+        "title": "Digital Marketing Executive",
+        "company": "FABINDIA LIMITED",
+        "location": "Faridabad, Haryana, India",
+        "link": "https://in.linkedin.com/jobs/view/digital-marketing-executive-at-fabindia-limited-4433738299?position=3&pageNum=0&refId=MxNa1JTxzxp3xeE1N7WcIw%3D%3D&trackingId=sFYkxnencpMFRCEpc9ZcPA%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
+        "title": "Product Marketing Manager, Brand and Reputation",
+        "company": "Google",
+        "location": "Mumbai, Maharashtra, India",
+        "link": "https://in.linkedin.com/jobs/view/product-marketing-manager-brand-and-reputation-at-google-4424589654?position=4&pageNum=0&refId=MxNa1JTxzxp3xeE1N7WcIw%3D%3D&trackingId=wdUmGE3CDn6zI850ccCwNg%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
+        "title": "Product Marketing Manager",
+        "company": "Google",
+        "location": "Mumbai, Maharashtra, India",
+        "link": "https://in.linkedin.com/jobs/view/product-marketing-manager-at-google-4425267757?position=5&pageNum=0&refId=MxNa1JTxzxp3xeE1N7WcIw%3D%3D&trackingId=OFqOu%2FllKAHakpwVYQrKXQ%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
+        "title": "Area Manager- HDFC BB | Ghaziabad",
+        "company": "Aditya Birla Capital",
+        "location": "Uttar Pradesh, India",
+        "link": "https://in.linkedin.com/jobs/view/area-manager-hdfc-bb-ghaziabad-at-aditya-birla-capital-4434939493?position=6&pageNum=0&refId=MxNa1JTxzxp3xeE1N7WcIw%3D%3D&trackingId=klluGyELyubchJ6d55UjDg%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
+        "title": "Product Marketing Manager",
+        "company": "Google",
+        "location": "Gurugram, Haryana, India",
+        "link": "https://in.linkedin.com/jobs/view/product-marketing-manager-at-google-4425255907?position=7&pageNum=0&refId=MxNa1JTxzxp3xeE1N7WcIw%3D%3D&trackingId=%2FYmf8MmMDwdipImmRo%2B3Tw%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
+        "title": "Administrative Executive- Immediate joiner",
+        "company": "Aditya Birla Group",
+        "location": "Kolkata, West Bengal, India",
+        "link": "https://in.linkedin.com/jobs/view/administrative-executive-immediate-joiner-at-aditya-birla-group-4434948140?position=8&pageNum=0&refId=MxNa1JTxzxp3xeE1N7WcIw%3D%3D&trackingId=xMOyvlSnm3IL0vBUFV6jjQ%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
+        "title": "Product Marketing Manager",
+        "company": "Google",
+        "location": "Bengaluru, Karnataka, India",
+        "link": "https://in.linkedin.com/jobs/view/product-marketing-manager-at-google-4425253797?position=9&pageNum=0&refId=MxNa1JTxzxp3xeE1N7WcIw%3D%3D&trackingId=Y5w%2BwHHJwz7JSZwT5Ho1sg%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
+        "title": "Regional Marketing Manager - Hyd",
+        "company": "Aditya Birla Capital",
+        "location": "Maharashtra, India",
+        "link": "https://in.linkedin.com/jobs/view/regional-marketing-manager-hyd-at-aditya-birla-capital-4437116579?position=10&pageNum=0&refId=MxNa1JTxzxp3xeE1N7WcIw%3D%3D&trackingId=feJN49WMzScSkxG55TanIA%3D%3D",
         "category": "LinkedIn",
         "experience": "1-3 Years",
         "is_direct": false
