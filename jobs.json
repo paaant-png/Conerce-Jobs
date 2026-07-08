@@ -1,5 +1,95 @@
 [
     {
+        "title": "Marketing Manager",
+        "company": "Network18 Media & Investments Limited",
+        "location": "Noida, Uttar Pradesh, India",
+        "link": "https://in.linkedin.com/jobs/view/marketing-manager-at-network18-media-investments-limited-4435510674?position=1&pageNum=0&refId=rc7hBKQuxZLmgEnj7%2BCZpA%3D%3D&trackingId=hK%2FBBzHrhSIX24eltdKL4Q%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
+        "title": "Executive - Marketing",
+        "company": "Larsen & Toubro",
+        "location": "Mumbai, Maharashtra, India",
+        "link": "https://in.linkedin.com/jobs/view/executive-marketing-at-larsen-toubro-4419853503?position=2&pageNum=0&refId=rc7hBKQuxZLmgEnj7%2BCZpA%3D%3D&trackingId=eE27MDyBxbOKZinDEyIRwg%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
+        "title": "Digital Marketing Executive",
+        "company": "FABINDIA LIMITED",
+        "location": "Faridabad, Haryana, India",
+        "link": "https://in.linkedin.com/jobs/view/digital-marketing-executive-at-fabindia-limited-4433738299?position=3&pageNum=0&refId=rc7hBKQuxZLmgEnj7%2BCZpA%3D%3D&trackingId=5EfORx8k6tAYA9z7VJTtRg%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
+        "title": "Product Marketing Manager",
+        "company": "Google",
+        "location": "Mumbai, Maharashtra, India",
+        "link": "https://in.linkedin.com/jobs/view/product-marketing-manager-at-google-4425267757?position=4&pageNum=0&refId=rc7hBKQuxZLmgEnj7%2BCZpA%3D%3D&trackingId=RcKczlqr9mz0jjw%2FRZLFtA%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
+        "title": "Product Marketing Manager",
+        "company": "Google",
+        "location": "Gurugram, Haryana, India",
+        "link": "https://in.linkedin.com/jobs/view/product-marketing-manager-at-google-4425255907?position=5&pageNum=0&refId=rc7hBKQuxZLmgEnj7%2BCZpA%3D%3D&trackingId=njSGmzUX6bLkDNMEJPsncg%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
+        "title": "Brand Manager",
+        "company": "Aditya Birla Fashion and Retail Ltd.",
+        "location": "Karnataka, India",
+        "link": "https://in.linkedin.com/jobs/view/brand-manager-at-aditya-birla-fashion-and-retail-ltd-4437414181?position=6&pageNum=0&refId=rc7hBKQuxZLmgEnj7%2BCZpA%3D%3D&trackingId=1Gbrk5zkrGurkIRu7rYZ0A%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
+        "title": "Marketing Executive",
+        "company": "Lupin",
+        "location": "Chunar, Uttar Pradesh, India",
+        "link": "https://in.linkedin.com/jobs/view/marketing-executive-at-lupin-4427702112?position=7&pageNum=0&refId=rc7hBKQuxZLmgEnj7%2BCZpA%3D%3D&trackingId=nbh5DTcA6P04Phnw8kYB%2BQ%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
+        "title": "Regional Marketing Manager - Hyd",
+        "company": "Aditya Birla Capital",
+        "location": "Maharashtra, India",
+        "link": "https://in.linkedin.com/jobs/view/regional-marketing-manager-hyd-at-aditya-birla-capital-4437116579?position=8&pageNum=0&refId=rc7hBKQuxZLmgEnj7%2BCZpA%3D%3D&trackingId=SQswhqV3KA1iBC4jOFZ%2FzA%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
+        "title": "Product Marketing Manager",
+        "company": "Google",
+        "location": "Bengaluru, Karnataka, India",
+        "link": "https://in.linkedin.com/jobs/view/product-marketing-manager-at-google-4425253797?position=9&pageNum=0&refId=rc7hBKQuxZLmgEnj7%2BCZpA%3D%3D&trackingId=2gUgTwkQS0q3IkRY1Govtg%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
+        "title": "Area Sales Executive",
+        "company": "Britannia Industries Limited",
+        "location": "Kushinagar, Uttar Pradesh, India",
+        "link": "https://in.linkedin.com/jobs/view/area-sales-executive-at-britannia-industries-limited-4436957157?position=10&pageNum=0&refId=rc7hBKQuxZLmgEnj7%2BCZpA%3D%3D&trackingId=rNEhirAgd6tQDJoLS9atzQ%3D%3D",
+        "category": "LinkedIn",
+        "experience": "1-3 Years",
+        "is_direct": false
+    },
+    {
         "title": "Why Join Mars",
         "company": "Mars",
         "location": "India",
