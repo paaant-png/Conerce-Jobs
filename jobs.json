@@ -1,47 +1,11 @@
 [
     {
-        "title": "Why Join Mars",
+        "title": "Explore all Mars Openings",
         "company": "Mars",
-        "location": "India",
-        "link": "https://careers.mars.com/in/en/why-join-mars",
-        "category": "Direct",
-        "experience": "Mid-Senior",
-        "is_direct": true
-    },
-    {
-        "title": "Learning & Growth",
-        "company": "Mars",
-        "location": "India",
-        "link": "https://careers.mars.com/in/en/learning-growth",
-        "category": "Direct",
-        "experience": "Mid-Senior",
-        "is_direct": true
-    },
-    {
-        "title": "Making A Difference",
-        "company": "Mars",
-        "location": "India",
-        "link": "https://careers.mars.com/in/en/making-a-difference",
-        "category": "Direct",
-        "experience": "Mid-Senior",
-        "is_direct": true
-    },
-    {
-        "title": "Wellness & Benefits",
-        "company": "Mars",
-        "location": "India",
-        "link": "https://careers.mars.com/in/en/wellbeing-benefits-copy",
-        "category": "Direct",
-        "experience": "Mid-Senior",
-        "is_direct": true
-    },
-    {
-        "title": "Inclusion & Diversity",
-        "company": "Mars",
-        "location": "India",
-        "link": "https://careers.mars.com/in/en/inclusion-diversity",
-        "category": "Direct",
-        "experience": "Mid-Senior",
+        "location": "Career Portal",
+        "link": "https://careers.mars.com/in/en/search-results?keywords=marketing",
+        "category": "Portal",
+        "experience": "Various",
         "is_direct": true
     },
     {
